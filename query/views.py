@@ -27,7 +27,7 @@ def StudentViewQuery(request):
 
 def TeacherViewQuery(request):
     if request.method=="GET": 
-        return_data=Query.objects.filter(status__contains="PENDING").values('id','student_id','query','date')
+        return_data=Query.objects.filter(status__contains="PENDING").values('id','student_id','query','date','student__Name','student__mail_id','student__Roll_no','student__password','student__phone_no','student__Branch','student__course','answer','status')
         return JsonResponse(list(return_data),safe=False)
    
 
@@ -35,9 +35,9 @@ def AnswerQuery(request):
     if request.method=="POST":
         data=json.loads(request.body)
         answer=data['answer']
-        id=data['student_id']
-        if Query.objects.filter(student_id=id).exists():
-            Query.objects.filter(student_id=id).update(answer=answer,status="DONE")
+        id=data['id']
+        if Query.objects.filter(id=id).exists():
+            Query.objects.filter(id=id).update(answer=answer,status="DONE")
             return JsonResponse("success",safe=False)
         else:
-            return JsonResponse("student not exist",safe=False)
+            return JsonResponse("Query not exist",safe=False)
